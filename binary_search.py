@@ -43,7 +43,7 @@ def find_smallest_positive(xs):
         if xs[mid] < 0:
             left = mid + 1
         if xs[mid] == 0:
-            return mid+1
+            return mid + 1
         return go(left, right)
 
     return go(0, len(xs) - 1)
@@ -93,7 +93,7 @@ def count_step1(xs, x):
         if xs[mid] <= x:
             right = mid
         return go(left, right)
-    return go(0, len(xs)-1)
+    return go(0, len(xs) - 1)
 
 
 def count_step2(xs, x):
@@ -109,7 +109,7 @@ def count_step2(xs, x):
         if xs[mid] < x:
             right = mid
         return gogo(left, right)
-    return gogo(0, len(xs)-1)
+    return gogo(0, len(xs) - 1)
 
 
 def argmin(f, lo, hi, epsilon=1e-3):
