@@ -26,7 +26,25 @@ def find_smallest_positive(xs):
     >>> find_smallest_positive([-3, -2, -1]) is None
     True
     '''
+    if len(xs) == 0:
+        return None
 
+    def go(left, right):
+        if left == right:
+            if xs[left] > 0:
+                return left
+            else:
+                return None
+        mid = (left + right) // 2
+        if xs[mid] > 0:
+            right = mid
+        if xs[mid] < 0:
+            left = mid + 1
+        if xs[mid] == 0:
+            return mid+1
+        return go(left, right)
+
+    return go(0, len(xs) - 1)
 
 def count_repeats(xs, x):
     '''
@@ -52,7 +70,45 @@ def count_repeats(xs, x):
     >>> count_repeats([3, 2, 1], 4)
     0
     '''
+    if len(xs) == 0:
+        return 0
+    l = count_step1(xs,x)
+    h = count_step2(xs,x)
+    return h - l
 
+def count_step1(xs,x):
+    
+    def go(left, right):
+        if left == right:
+            if xs[left] == x:
+                return left
+            else:
+                return len(xs)
+        mid = (left + right) // 2
+        if xs[mid] > x:
+            left = mid + 1
+        if xs[mid] <= x:
+            right = mid
+        return go(left, right)
+
+    return go(0, len(xs)-1)
+    
+def count_step2(xs,x):
+    
+    def gogo(left, right):
+        if left == right:
+            if xs[left] < x:
+                return left
+            else:
+                return len(xs)
+        mid = (left + right) // 2
+        if xs[mid] >= x:
+            left = mid + 1
+        if xs[mid] < x:
+            right = mid
+        return gogo(left, right)
+        
+    return gogo(0, len(xs)-1)
 
 def argmin(f, lo, hi, epsilon=1e-3):
     '''
@@ -87,7 +143,22 @@ def argmin(f, lo, hi, epsilon=1e-3):
     >>> argmin(lambda x: (x-5)**2, -20, 0)
     -0.00016935087808430278
     '''
-
+    if hi - lo < epsilon:
+        return (hi + lo) / 2
+    
+    m1 = lo + (hi - lo) / 4
+    m2 = lo + (hi - lo) / 2
+    
+    fmin = min([f(lo),f(m1),f(m2),f(hi)])
+    
+    if fmin == f(lo):
+        return argmin(f,lo,m1,epsilon)
+    if fmin == f(m1):
+        return argmin(f,lo,m2,epsilon)
+    if fmin == f(m2):
+        return argmin(f,m1,hi,epsilon)
+    if fmin == f(hi):
+        return argmin(f,m2,hi,epsilon)
 
 ################################################################################
 # the functions below are extra credit
